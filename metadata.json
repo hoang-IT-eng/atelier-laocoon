@@ -1,0 +1,6 @@
+{
+  "name": "The Statue of Laocoön — Bronze and Time",
+  "description": "A cinematic, scroll-driven landing page centered on a glowing bronze horse sculpture in WebGL with liquid-bronze wave shader, forge sparks, and editorial typography.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
