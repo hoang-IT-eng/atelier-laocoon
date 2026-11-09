@@ -33,3 +33,22 @@ export function calculateCameraOrbit(scroll: number): CameraOrbitParams {
 
   return { x, y, z, lookAtXOffset };
 }
+
+export interface LightingParams {
+  keyLightIntensity: number;
+  fillLightIntensity: number;
+  ambientLightIntensity: number;
+  rimLightIntensity: number;
+  forgeGlowIntensity: number;
+}
+
+export function calculateLightingIntensities(scroll: number): LightingParams {
+  const s = Math.max(0, Math.min(1, scroll));
+  return {
+    keyLightIntensity: 18.0 + s * 8.0,
+    fillLightIntensity: 0.8 + s * 3.2,
+    ambientLightIntensity: 0.10 + s * 0.12,
+    rimLightIntensity: 10.0 + s * 5.0,
+    forgeGlowIntensity: s * 5.5,
+  };
+}

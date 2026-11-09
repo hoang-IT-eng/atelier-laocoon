@@ -445,6 +445,7 @@
     let gltfModel;     // the statue
     let modelPivot;    // pivot group for perfect center-rotation
     let mixer;
+    let ambientLight, keyLight, rimLight, fillLight, forgeGlowLight;
     const clock = new THREE.Clock();
     let currentScroll = 0;   // smoothed accumulated scroll for lerping
 
@@ -727,6 +728,9 @@
 
                 // 5. lower the pivot for a grounded stance
                 modelPivot.position.y = -0.4;
+
+                // Apply initial lighting warmth to the model
+                updateLighting(currentScroll);
             },
             undefined,
             (error) => { console.error('Error loading bronze horse model:', error); }
@@ -778,6 +782,53 @@
             y = ((y % 100) + 100) % 100;
             dot.style.top = `${y}%`;
         });
+    }
+
+    function updateLighting(scroll) {
+        const s = Math.max(0, Math.min(1, scroll));
+
+        // Key light intensity scales up as sculpture is highlighted in story
+        if (keyLight) {
+            keyLight.intensity = 18.0 + s * 8.0;
+        }
+
+        // Fill light from below warms up dramatically and shifts to rich molten amber
+        if (fillLight) {
+            fillLight.intensity = 0.8 + s * 3.2;
+            fillLight.color.setRGB(1.0, 0.95 - s * 0.35, 0.90 - s * 0.65);
+        }
+
+        // Ambient light lifts deep shadows with warm bronze radiance
+        if (ambientLight) {
+            ambientLight.intensity = 0.10 + s * 0.12;
+            ambientLight.color.setRGB(1.0, 1.0 - s * 0.15, 1.0 - s * 0.30);
+        }
+
+        // Rim light brightens to define the crystalline silhouette against the sapphire background
+        if (rimLight) {
+            rimLight.intensity = 10.0 + s * 5.0;
+        }
+
+        // Core molten forge glow under the sculpture warms up with incandescent heat
+        if (forgeGlowLight) {
+            forgeGlowLight.intensity = s * 5.5;
+        }
+
+        // Subtle fiery molten bronze emissive glow across the sculpture muscles
+        if (gltfModel) {
+            gltfModel.traverse((child) => {
+                if (child.isMesh && child.material) {
+                    if (!child.material.emissive) {
+                        child.material.emissive = new THREE.Color(0x000000);
+                    }
+                    child.material.emissive.setRGB(
+                        s * 0.14,
+                        s * 0.055,
+                        s * 0.015
+                    );
+                }
+            });
+        }
     }
 
     function updateSlides(scroll) {
@@ -898,10 +949,12 @@
             currentScroll += scrollDelta * 0.025;
             updateSlides(currentScroll);
             updateGridDots(currentScroll);
+            updateLighting(currentScroll);
         } else if (currentScroll !== targetScroll) {
             currentScroll = targetScroll;
             updateSlides(currentScroll);
             updateGridDots(currentScroll);
+            updateLighting(currentScroll);
         }
 
         // smooth model rotation lerp
@@ -1033,12 +1086,12 @@
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 2.2;
 
-        // Chiaroscuro Lighting
-        const ambientLight = new THREE.AmbientLight('#ffffff', 0.1);
+        // Chiaroscuro Lighting with Dynamic Warmth & Intensity Progression
+        ambientLight = new THREE.AmbientLight('#ffffff', 0.1);
         scene.add(ambientLight);
 
         // Key light: super-bright white from upper-right, casts shadows
-        const keyLight = new THREE.SpotLight('#ffffff', 18.0);
+        keyLight = new THREE.SpotLight('#ffffff', 18.0);
         keyLight.position.set(4, 6, 3);
         keyLight.angle = Math.PI / 4;
         keyLight.penumbra = 0.9;
@@ -1051,14 +1104,19 @@
         scene.add(keyLight);
 
         // Rim light: cool blue from behind-left, defines the silhouette
-        const rimLight = new THREE.DirectionalLight('#e3f2ff', 10.0);
+        rimLight = new THREE.DirectionalLight('#e3f2ff', 10.0);
         rimLight.position.set(-5, 3, -4);
         scene.add(rimLight);
 
-        // Fill light: very faint warm cream from below-front
-        const fillLight = new THREE.DirectionalLight('#fff3e6', 0.8);
+        // Fill light: very faint warm cream from below-front, warms up as story progresses
+        fillLight = new THREE.DirectionalLight('#fff3e6', 0.8);
         fillLight.position.set(-2, -4, 2);
         scene.add(fillLight);
+
+        // Molten forge glow point light (positioned under statue to make bronze warm up / glow from core)
+        forgeGlowLight = new THREE.PointLight('#ff7722', 0.0, 8.0);
+        forgeGlowLight.position.set(0, -0.6, 0.4);
+        scene.add(forgeGlowLight);
 
         // Forge sparks
         createSparks();
@@ -1075,6 +1133,7 @@
         // Initial update so slide 1 is active right away
         updateSlides(0);
         updateGridDots(0);
+        updateLighting(0);
 
         // Start render loop
         animate();

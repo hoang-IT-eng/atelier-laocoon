@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { calculateStoryDashProgress, isSlideActive, calculateCameraOrbit } from './rules';
+import { calculateStoryDashProgress, isSlideActive, calculateCameraOrbit, calculateLightingIntensities } from './rules';
 
 test('calculateStoryDashProgress correctly clamps and interpolates across quarters', () => {
   // Dash 1 (0.0 to 0.25)
@@ -69,4 +69,27 @@ test('calculateCameraOrbit produces expected initial framing and 360 orbit posit
   const full = calculateCameraOrbit(1.0);
   assert.ok(Math.abs(full.x) < 1e-5);
   assert.ok(Math.abs(full.z - 4.2) < 1e-5);
+});
+
+test('calculateLightingIntensities scales warmth and intensity with scroll progression', () => {
+  const atStart = calculateLightingIntensities(0.0);
+  assert.ok(Math.abs(atStart.keyLightIntensity - 18.0) < 1e-5);
+  assert.ok(Math.abs(atStart.fillLightIntensity - 0.8) < 1e-5);
+  assert.ok(Math.abs(atStart.ambientLightIntensity - 0.10) < 1e-5);
+  assert.ok(Math.abs(atStart.rimLightIntensity - 10.0) < 1e-5);
+  assert.ok(Math.abs(atStart.forgeGlowIntensity - 0.0) < 1e-5);
+
+  const atMid = calculateLightingIntensities(0.5);
+  assert.ok(Math.abs(atMid.keyLightIntensity - 22.0) < 1e-5);
+  assert.ok(Math.abs(atMid.fillLightIntensity - 2.4) < 1e-5);
+  assert.ok(Math.abs(atMid.ambientLightIntensity - 0.16) < 1e-5);
+  assert.ok(Math.abs(atMid.rimLightIntensity - 12.5) < 1e-5);
+  assert.ok(Math.abs(atMid.forgeGlowIntensity - 2.75) < 1e-5);
+
+  const atEnd = calculateLightingIntensities(1.0);
+  assert.ok(Math.abs(atEnd.keyLightIntensity - 26.0) < 1e-5);
+  assert.ok(Math.abs(atEnd.fillLightIntensity - 4.0) < 1e-5);
+  assert.ok(Math.abs(atEnd.ambientLightIntensity - 0.22) < 1e-5);
+  assert.ok(Math.abs(atEnd.rimLightIntensity - 15.0) < 1e-5);
+  assert.ok(Math.abs(atEnd.forgeGlowIntensity - 5.5) < 1e-5);
 });
