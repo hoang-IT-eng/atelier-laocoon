@@ -1,6 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { calculateStoryDashProgress, isSlideActive, calculateCameraOrbit, calculateLightingIntensities } from './rules';
+import {
+  calculateStoryDashProgress,
+  isSlideActive,
+  calculateCameraOrbit,
+  calculateLightingIntensities,
+  calculateGranularGrainParams,
+  getChapterRegisterName,
+} from './rules';
 
 test('calculateStoryDashProgress correctly clamps and interpolates across quarters', () => {
   // Dash 1 (0.0 to 0.25)
@@ -40,32 +47,20 @@ test('isSlideActive matches specified milestone intervals', () => {
 });
 
 test('calculateCameraOrbit produces expected initial framing and 360 orbit positions', () => {
-  // At scroll = 0:
-  // phi = 0
-  // y = 0.35 + sin(0)*0.8 = 0.35
-  // radius = 4.2 - sin(0)*0.6 = 4.2
-  // x = 4.2 * sin(0) = 0
-  // z = 4.2 * cos(0) = 4.2
-  // easeFactor = (cos(0) + 1) * 0.5 = 1.0
-  // lookAtXOffset = -0.9 * 1.0 = -0.9
   const initial = calculateCameraOrbit(0.0);
   assert.ok(Math.abs(initial.x - 0.0) < 1e-5);
   assert.ok(Math.abs(initial.y - 0.35) < 1e-5);
   assert.ok(Math.abs(initial.z - 4.2) < 1e-5);
   assert.ok(Math.abs(initial.lookAtXOffset - (-0.9)) < 1e-5);
 
-  // At scroll = 0.28 (transition to centered lookAt completes):
   const transitioned = calculateCameraOrbit(0.28);
   assert.ok(Math.abs(transitioned.lookAtXOffset - 0.0) < 1e-5);
 
-  // At scroll = 0.5 (halfway orbit, opposite side z < 0):
   const half = calculateCameraOrbit(0.5);
-  // phi = PI -> x ~ 0, z ~ -radius
   assert.ok(Math.abs(half.x) < 1e-5);
   assert.ok(half.z < 0);
   assert.ok(Math.abs(half.lookAtXOffset) < 1e-5);
 
-  // At scroll = 1.0 (full 360 orbit back to start angle):
   const full = calculateCameraOrbit(1.0);
   assert.ok(Math.abs(full.x) < 1e-5);
   assert.ok(Math.abs(full.z - 4.2) < 1e-5);
@@ -93,3 +88,40 @@ test('calculateLightingIntensities scales warmth and intensity with scroll progr
   assert.ok(Math.abs(atEnd.rimLightIntensity - 15.0) < 1e-5);
   assert.ok(Math.abs(atEnd.forgeGlowIntensity - 5.5) < 1e-5);
 });
+
+test('calculateGranularGrainParams modulates grain rate, metallic pitch, and decay based on scroll speed', () => {
+  // Idle scroll velocity -> should not trigger
+  const idle = calculateGranularGrainParams(0.0, 0.0, 500, 0, 'bronze');
+  assert.equal(idle.shouldTrigger, false);
+  assert.equal(idle.gainLevel, 0);
+  assert.equal(idle.visualResonancePulse, 0);
+  assert.equal(idle.chapterRegisterName, 'I · Molten Bronze');
+
+  // Gentle scroll velocity with sufficient elapsed time -> triggers warm longer grain
+  const gentle = calculateGranularGrainParams(0.1, 0.005, 250, 0, 'bronze');
+  assert.equal(gentle.shouldTrigger, true);
+  assert.ok(gentle.grainIntervalMs > 150);
+  assert.ok(gentle.grainDurationSec > 1.1);
+  assert.ok(gentle.gainLevel > 0.025 && gentle.gainLevel < 0.12);
+
+  // Fast scroll velocity -> shorter grain interval, higher frequency, louder gain, tighter decay
+  const fast = calculateGranularGrainParams(0.85, 0.045, 50, 0, 'bronze');
+  assert.equal(fast.shouldTrigger, true);
+  assert.equal(fast.grainIntervalMs, 28);
+  assert.ok(fast.baseFrequencyHz > gentle.baseFrequencyHz);
+  assert.ok(fast.grainDurationSec < gentle.grainDurationSec);
+  assert.ok(fast.gainLevel > gentle.gainLevel);
+  assert.equal(fast.chapterRegisterName, 'IV · Sapphire Aether');
+
+  // Cooldown check: fast velocity but only 10ms elapsed (< 28ms interval) -> shouldTrigger is false
+  const onCooldown = calculateGranularGrainParams(0.85, 0.045, 10, 1, 'bronze');
+  assert.equal(onCooldown.shouldTrigger, false);
+});
+
+test('getChapterRegisterName maps scroll quarters to curatorial acoustic chapters', () => {
+  assert.equal(getChapterRegisterName(0.0), 'I · Molten Bronze');
+  assert.equal(getChapterRegisterName(0.34), 'II · Marble Harmonics');
+  assert.equal(getChapterRegisterName(0.62), 'III · Liquid Resonance');
+  assert.equal(getChapterRegisterName(0.94), 'IV · Sapphire Aether');
+});
+

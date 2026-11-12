@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Statue of Laocoön</title>
-  <meta name="description" content="A cinematic, scroll-driven landing page centered on a glowing, semi-polished bronze horse sculpture rendered in WebGL on a deep-black stage.">
-  <meta property="og:title" content="The Statue of Laocoön">
-  <meta property="og:description" content="A cinematic, scroll-driven landing page centered on a glowing, semi-polished bronze horse sculpture rendered in WebGL on a deep-black stage.">
+  <title>The Statue of Laocoön — Bronze and Time</title>
+  <meta name="description" content="A cinematic, scroll-driven landing page centered on a glowing bronze horse sculpture in WebGL with liquid-bronze wave shader, forge sparks, and editorial typography.">
+  <meta property="og:title" content="The Statue of Laocoön — Bronze and Time">
+  <meta property="og:description" content="A cinematic, scroll-driven landing page centered on a glowing bronze horse sculpture in WebGL with liquid-bronze wave shader, forge sparks, and editorial typography.">
   <meta property="og:type" content="website">
 
   <style>
@@ -313,6 +313,119 @@
         transform: scale(1.03);
     }
 
+    /* Curatorial Granular Metallic Resonance Dock */
+    .resonance-dock {
+        position: fixed;
+        bottom: 22px;
+        right: 48px;
+        z-index: 25;
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 15px;
+        background: rgba(10, 10, 12, 0.88);
+        border: 1px solid rgba(255, 246, 237, 0.16);
+        border-radius: 10px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);
+        transition: border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .resonance-dock.resonating {
+        border-color: rgba(255, 195, 130, 0.48);
+    }
+    .resonance-toggle-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: transparent;
+        border: none;
+        color: #fff6ed;
+        font-family: 'Outfit', sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 4px 2px;
+        transition: opacity 0.2s ease;
+    }
+    .resonance-toggle-btn[aria-pressed="false"] {
+        opacity: 0.55;
+    }
+    .resonance-bars {
+        display: inline-flex;
+        align-items: center;
+        gap: 2.5px;
+        height: 16px;
+        width: 20px;
+    }
+    .resonance-bar {
+        width: 2px;
+        height: 14px;
+        background: #e6a86a;
+        border-radius: 1px;
+        transform: scaleY(0.22);
+        transform-origin: center;
+        transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
+    }
+    .resonance-toggle-btn[aria-pressed="false"] .resonance-bar {
+        background: #71717a;
+        transform: scaleY(0.15) !important;
+    }
+    .resonance-divider {
+        width: 1px;
+        height: 16px;
+        background: rgba(255, 255, 255, 0.14);
+        flex-shrink: 0;
+    }
+    .resonance-telemetry {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+        color: #d1d5db;
+        letter-spacing: 0.6px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    .resonance-chapter {
+        color: #fff6ed;
+        font-weight: 400;
+    }
+    .tabular-metric {
+        font-variant-numeric: tabular-nums;
+        color: #9ca3af;
+    }
+    .resonance-sep {
+        color: rgba(255, 255, 255, 0.28);
+    }
+    .resonance-mode-btn,
+    .resonance-strike-btn {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        color: #f4f4f5;
+        font-family: 'Outfit', sans-serif;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        padding: 6px 12px;
+        border-radius: 6px;
+        white-space: nowrap;
+        flex-shrink: 0;
+        transition: background 0.18s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .resonance-mode-btn:hover,
+    .resonance-strike-btn:hover {
+        background: rgba(255, 246, 237, 0.14);
+        border-color: rgba(255, 246, 237, 0.38);
+        transform: translateY(-1px);
+    }
+    .resonance-strike-btn:active {
+        transform: scale(0.96);
+    }
+
     @media (max-width: 768px) {
         .cinematic-container { padding: 0 24px 24px 24px; }
         .grid-lines { left: 16px; right: 16px; width: calc(100% - 32px); }
@@ -326,6 +439,16 @@
         #slide-3 { left: 16px; width: calc(100% - 32px); max-width: calc(100% - 32px); }
         #slide-4 { left: 16px; max-width: calc(100% - 32px); }
         .header-nav { display: none; }
+        .resonance-dock {
+            right: 16px;
+            left: 16px;
+            bottom: 16px;
+            padding: 8px 12px;
+            gap: 8px;
+            justify-content: space-between;
+        }
+        .resonance-chapter { display: none; }
+        .resonance-sep.chapter-sep { display: none; }
     }
   </style>
 
@@ -415,6 +538,35 @@
   <!-- WebGL Canvas -->
   <canvas id="webgl"></canvas>
 
+  <!-- Curatorial Granular Metallic Resonance Console -->
+  <aside class="resonance-dock" id="resonance-dock" aria-label="Granular Metallic Synthesis Controls">
+    <button type="button" class="resonance-toggle-btn" id="resonance-toggle-btn" aria-pressed="true">
+      <span class="resonance-bars" aria-hidden="true">
+        <span class="resonance-bar" id="res-bar-0"></span>
+        <span class="resonance-bar" id="res-bar-1"></span>
+        <span class="resonance-bar" id="res-bar-2"></span>
+        <span class="resonance-bar" id="res-bar-3"></span>
+        <span class="resonance-bar" id="res-bar-4"></span>
+      </span>
+      <span id="resonance-status-label">Resonance: On</span>
+    </button>
+    <span class="resonance-divider" aria-hidden="true"></span>
+    <div class="resonance-telemetry" aria-live="off">
+      <span class="resonance-chapter" id="resonance-chapter">I · Molten Bronze</span>
+      <span class="resonance-sep chapter-sep" aria-hidden="true">·</span>
+      <span class="tabular-metric" id="resonance-freq">220 Hz</span>
+      <span class="resonance-sep" aria-hidden="true">·</span>
+      <span class="tabular-metric" id="resonance-density">0 gr/s</span>
+    </div>
+    <span class="resonance-divider" aria-hidden="true"></span>
+    <button type="button" class="resonance-mode-btn" id="tuning-mode-btn" aria-label="Switch Harmonic Tuning Scale">
+      Bronze Dorian
+    </button>
+    <button type="button" class="resonance-strike-btn" id="strike-bronze-btn" aria-label="Strike Bronze Chime">
+      Strike
+    </button>
+  </aside>
+
   <!-- Editorial Contact Dialog -->
   <div class="contact-modal-backdrop" id="contact-dialog" role="dialog" aria-modal="true" aria-labelledby="contact-title">
     <div class="contact-modal">
@@ -459,7 +611,8 @@
         uTime: { value: 0 },
         uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
         uMouse: { value: new THREE.Vector2(0, 0) },
-        uScroll: { value: 0 }
+        uScroll: { value: 0 },
+        uResonance: { value: 0 }
     };
 
     let sparkParticles;
@@ -467,6 +620,222 @@
     const sparkData = [];
 
     const sizes = { width: window.innerWidth, height: window.innerHeight };
+
+    // --- Granular Metallic Synthesis State & Pure Rules ---
+    const TUNING_SCALES = {
+        bronze: [146.83, 174.61, 196.00, 220.00, 261.63, 293.66, 349.23, 392.00, 440.00, 523.25, 587.33, 659.25],
+        crystalline: [196.00, 220.00, 246.94, 277.18, 293.66, 329.63, 369.99, 392.00, 440.00, 493.88, 554.37, 587.33],
+        harmonic: [130.81, 196.22, 261.63, 327.03, 392.44, 457.85, 523.25, 588.66, 654.06, 719.47, 784.88, 915.69]
+    };
+    const TUNING_LABELS = {
+        bronze: 'Bronze Dorian',
+        crystalline: 'Crystal Lydian',
+        harmonic: 'Pure Harmonics'
+    };
+    const TUNING_ORDER = ['bronze', 'crystalline', 'harmonic'];
+
+    let isAudioEnabled = true;
+    let currentTuningMode = 'bronze';
+    let audioCtx = null;
+    let masterGainNode = null;
+    let shimmerSendNode = null;
+    let lastGrainTimestamp = 0;
+    let grainStepCounter = 0;
+    let totalGrainsTriggered = 0;
+    let recentGrainTimestamps = [];
+    let resonanceEnergy = 0;       // smoothed [0..1] visual & shader coupling energy
+    let manualVelocityImpulse = 0; // impulse from wheel/nav/strike events
+    let lastKnownFreqHz = 220;
+
+    function getChapterRegisterName(scroll) {
+        const s = Math.max(0, Math.min(1, scroll));
+        if (s < 0.25) return 'I · Molten Bronze';
+        if (s < 0.50) return 'II · Marble Harmonics';
+        if (s < 0.75) return 'III · Liquid Resonance';
+        return 'IV · Sapphire Aether';
+    }
+
+    function calculateGranularGrainParams(scroll, scrollVelocity, elapsedSinceLastGrainMs, grainStepIndex, tuningMode = 'bronze') {
+        const s = Math.max(0, Math.min(1, scroll));
+        const v = Math.max(0, scrollVelocity);
+        const normalizedVel = Math.min(1, v / 0.045);
+        const grainIntervalMs = Math.round(210 - normalizedVel * 182);
+        const velocityThreshold = 0.00018;
+        const shouldTrigger = v >= velocityThreshold && elapsedSinceLastGrainMs >= grainIntervalMs;
+
+        const scale = TUNING_SCALES[tuningMode] || TUNING_SCALES.bronze;
+        const registerOffset = Math.floor(s * 5);
+        const stepCycle = Math.abs(Math.floor(grainStepIndex)) % 7;
+        const scaleIdx = Math.min(scale.length - 1, registerOffset + (stepCycle % (scale.length - registerOffset)));
+
+        const velocityPitchMultiplier = 1.0 + normalizedVel * 0.25;
+        const baseFrequencyHz = Number((scale[scaleIdx] * velocityPitchMultiplier).toFixed(2));
+
+        const p2 = Number((2.0 + s * 0.12).toFixed(3));
+        const p3 = Number((2.756 + s * 0.24).toFixed(3));
+        const p4 = Number((4.65 + s * 0.754).toFixed(3));
+        const inharmonicPartials = [1.0, p2, p3, p4];
+
+        const grainDurationSec = Number((1.35 - normalizedVel * 0.75).toFixed(3));
+        const gainLevel = v < velocityThreshold
+            ? 0
+            : Number((0.025 + Math.pow(normalizedVel, 0.75) * 0.175).toFixed(4));
+
+        const orbitPan = Math.sin(s * Math.PI * 2.0) * 0.55;
+        const spread = ((Math.abs(grainStepIndex) % 2 === 0 ? 1 : -1) * 0.18);
+        const pan = Number(Math.max(-0.85, Math.min(0.85, orbitPan + spread)).toFixed(3));
+        const filterQ = Number((8.0 + s * 10.0 + normalizedVel * 4.0).toFixed(2));
+        const visualResonancePulse = v < velocityThreshold
+            ? 0
+            : Number(Math.min(1, 0.2 + normalizedVel * 0.8).toFixed(3));
+
+        return {
+            shouldTrigger,
+            grainIntervalMs,
+            baseFrequencyHz,
+            inharmonicPartials,
+            grainDurationSec,
+            gainLevel,
+            pan,
+            filterQ,
+            visualResonancePulse,
+            chapterRegisterName: getChapterRegisterName(s)
+        };
+    }
+
+    function ensureAudioContext() {
+        if (!isAudioEnabled) return null;
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return null;
+
+        if (!audioCtx) {
+            try {
+                audioCtx = new AudioContextClass();
+                masterGainNode = audioCtx.createGain();
+                masterGainNode.gain.value = 0.75;
+                masterGainNode.connect(audioCtx.destination);
+
+                // Vaulted gallery stereo metallic shimmer delay network
+                shimmerSendNode = audioCtx.createGain();
+                shimmerSendNode.gain.value = 0.28;
+
+                const delayL = audioCtx.createDelay(1.0);
+                const delayR = audioCtx.createDelay(1.0);
+                delayL.delayTime.value = 0.165;
+                delayR.delayTime.value = 0.245;
+
+                const feedbackL = audioCtx.createGain();
+                const feedbackR = audioCtx.createGain();
+                feedbackL.gain.value = 0.36;
+                feedbackR.gain.value = 0.36;
+
+                const dampFilter = audioCtx.createBiquadFilter();
+                dampFilter.type = 'lowpass';
+                dampFilter.frequency.value = 3400;
+
+                const merger = audioCtx.createChannelMerger(2);
+
+                shimmerSendNode.connect(delayL);
+                shimmerSendNode.connect(delayR);
+                delayL.connect(feedbackL);
+                delayR.connect(feedbackR);
+                feedbackL.connect(dampFilter);
+                feedbackR.connect(dampFilter);
+                dampFilter.connect(delayR);
+                dampFilter.connect(delayL);
+
+                delayL.connect(merger, 0, 0);
+                delayR.connect(merger, 0, 1);
+                merger.connect(masterGainNode);
+            } catch (err) {
+                return null;
+            }
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume().catch(() => {});
+        }
+        return audioCtx;
+    }
+
+    function synthesizeMetallicGrain(params) {
+        const ctx = ensureAudioContext();
+        if (!ctx || !masterGainNode) return;
+
+        try {
+            const now = ctx.currentTime;
+            const dur = params.grainDurationSec;
+            const f0 = params.baseFrequencyHz;
+            const gain = Math.max(0.015, params.gainLevel);
+
+            // Stereo panner for spatial 360° sculpture orbit positioning
+            const panner = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
+            if (panner) {
+                panner.pan.setValueAtTime(params.pan, now);
+            }
+
+            // High-Q metallic resonant peaking filter
+            const resonator = ctx.createBiquadFilter();
+            resonator.type = 'peaking';
+            resonator.frequency.setValueAtTime(Math.min(10000, f0 * 2.756), now);
+            resonator.Q.setValueAtTime(params.filterQ, now);
+            resonator.gain.setValueAtTime(6.5, now);
+
+            const grainMaster = ctx.createGain();
+            grainMaster.gain.setValueAtTime(0.0001, now);
+            grainMaster.gain.linearRampToValueAtTime(gain, now + 0.006);
+            grainMaster.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+            grainMaster.connect(resonator);
+            if (panner) {
+                resonator.connect(panner);
+                panner.connect(masterGainNode);
+                if (shimmerSendNode) panner.connect(shimmerSendNode);
+            } else {
+                resonator.connect(masterGainNode);
+                if (shimmerSendNode) resonator.connect(shimmerSendNode);
+            }
+
+            // FM metallic strike exciter (creates authentic cast-bronze transient bloom)
+            const fmOsc = ctx.createOscillator();
+            const fmGain = ctx.createGain();
+            fmOsc.type = 'sine';
+            fmOsc.frequency.setValueAtTime(f0 * 3.14159, now);
+            fmGain.gain.setValueAtTime(f0 * 0.85, now);
+            fmGain.gain.exponentialRampToValueAtTime(0.01, now + Math.min(0.065, dur * 0.25));
+            fmOsc.connect(fmGain);
+            fmOsc.start(now);
+            fmOsc.stop(now + dur);
+
+            // 4 Inharmonic Chladni Bronze Modal Partials
+            const partialWeights = [0.55, 0.24, 0.14, 0.07];
+            const partialDecayScale = [1.0, 0.72, 0.48, 0.28];
+
+            params.inharmonicPartials.forEach((ratio, idx) => {
+                const osc = ctx.createOscillator();
+                const pGain = ctx.createGain();
+                osc.type = idx === 1 ? 'triangle' : 'sine';
+                osc.frequency.setValueAtTime(Math.min(14000, f0 * ratio), now);
+
+                // Couple FM transient into fundamental and 1st overtone
+                if (idx <= 1) {
+                    fmGain.connect(osc.frequency);
+                }
+
+                const pDur = Math.max(0.08, dur * partialDecayScale[idx]);
+                const peakWeight = partialWeights[idx];
+                pGain.gain.setValueAtTime(0.0001, now);
+                pGain.gain.linearRampToValueAtTime(peakWeight, now + 0.004);
+                pGain.gain.exponentialRampToValueAtTime(0.0001, now + pDur);
+
+                osc.connect(pGain);
+                pGain.connect(grainMaster);
+                osc.start(now);
+                osc.stop(now + pDur + 0.02);
+            });
+        } catch (e) {
+            // Ignore transient Web Audio scheduling errors
+        }
+    }
 
     function createBackgroundShader() {
         const vertexShader = `
@@ -483,6 +852,7 @@
             uniform vec2 uResolution;
             uniform vec2 uMouse;
             uniform float uScroll;
+            uniform float uResonance;
 
             // 3D Noise function for organic warping (high performance hash-based noise)
             float hash(float n) { return fract(sin(n) * 43758.5453123); }
@@ -506,74 +876,58 @@
                 float scroll = uScroll;
                 
                 // --- 1. Constant Wave Parameters (Perfect Scroll Stability) ---
-                // Keep frequencies and angles constant to prevent compressing/speeding waves on scroll
                 float angle1 = 0.6;
                 float angle2 = -0.7;
                 float angle3 = 1.2;
                 
-                float freq1 = 2.4;  // Higher frequency = significantly more lines on screen
+                float freq1 = 2.4;
                 float freq2 = 3.2;
                 float freq3 = 4.0;
                 
                 // --- 2. Coordinates Distortion (Smooth Rounded Arcs & Scroll Deformation) ---
                 vec2 warpedUv = uv;
+                float scrollDeform = scroll * 5.0;
                 
-                // Scroll directly drives the deformation of the wave shapes!
-                // As you scroll, the phase of the distortion shifts, smoothly bending the rounded lines.
-                float scrollDeform = scroll * 5.0; // 5 radians of smooth sweeping deformation
+                // Subtle acoustic standing-wave micro-ripple when granular metallic ringing is active
+                float acousticRipple = sin(length(uv) * 28.0 - uTime * 9.0) * (uResonance * 0.018);
                 
-                // Large scale, perfectly smooth sine-wave distortions for clean, even, rounded arcs
-                warpedUv.x += sin(uv.y * 2.5 + time * 0.2 + scrollDeform) * 0.35;
-                warpedUv.y += cos(uv.x * 2.5 - time * 0.15 - scrollDeform * 0.8) * 0.35;
+                warpedUv.x += sin(uv.y * 2.5 + time * 0.2 + scrollDeform) * 0.35 + acousticRipple;
+                warpedUv.y += cos(uv.x * 2.5 - time * 0.15 - scrollDeform * 0.8) * 0.35 - acousticRipple;
                 
-                // Secondary clean curve to create elegant, topographical intersections
                 warpedUv.x += sin(uv.y * 1.2 - time * 0.1 - scrollDeform * 1.5) * 0.25;
                 warpedUv.y += cos(uv.x * 1.2 + time * 0.18 + scrollDeform * 1.2) * 0.25;
                 
-                // Soft global sliding shift based on scroll parallax and mouse movement
-                // Keep drift multipliers tiny so scroll motion remains extremely gentle
                 vec2 scrollDrift = vec2(scroll * 0.04, -scroll * 0.02);
                 vec2 mouseShift = vec2(uMouse.x * aspect * 0.05, uMouse.y * 0.05);
                 warpedUv += scrollDrift + mouseShift;
                 
                 // --- 3. Layered Wave Computations ---
-                // Wave directions
                 vec2 dir1 = vec2(cos(angle1), sin(angle1));
                 vec2 dir2 = vec2(cos(angle2), sin(angle2));
                 vec2 dir3 = vec2(cos(angle3), sin(angle3));
                 
-                // Layered sine wave calculations with self-warping
                 float w1 = sin(dot(warpedUv, dir1) * freq1 + time * 1.0);
                 float w2 = cos(dot(warpedUv, dir2) * freq2 - time * 1.4 + w1 * 0.4);
                 float w3 = sin(dot(warpedUv, dir3) * freq3 + time * 1.8 + w2 * 0.5);
                 
-                // Combine layers into a seamless wave scalar field in [-1.0, 1.0]
                 float waveField = w1 * 0.50 + w2 * 0.35 + w3 * 0.15;
                 
                 // --- 4. Crisp Metallic Lustre ---
-                // Wide satin sheen (gives defined body to the folds without haze)
                 float wideSheen = pow(max(0.0, 1.0 - abs(waveField - 0.1)), 2.5);
-                
-                // Crisp, thicker specular reflection (defined metallic shine, ensuring thickness with more lines)
                 float crispSpecular = pow(max(0.0, 1.0 - abs(waveField - 0.15)), 8.0);
-                
-                // Highlight blend: crisp, defined glowing folds
-                float crest = wideSheen * 0.5 + crispSpecular * 0.9;
+                float crest = wideSheen * 0.5 + crispSpecular * (0.9 + uResonance * 0.45);
                 
                 // --- 5. Scroll-Driven Color Palettes: Pure Bronze to Pure Blue ---
-                // Top Palette (Scroll = 0.0): Rich Molten Bronze
-                vec3 c0_shadow = vec3(0.0010, 0.0006, 0.0004); // Deepest bronze shadow
-                vec3 c0_wave1  = vec3(0.085, 0.040, 0.015);    // Rich copper-bronze
-                vec3 c0_wave2  = vec3(0.050, 0.022, 0.008);    // Deep bronze body
-                vec3 c0_crest  = vec3(0.45, 0.30, 0.18);       // Polished bronze/gold sheen
+                vec3 c0_shadow = vec3(0.0010, 0.0006, 0.0004);
+                vec3 c0_wave1  = vec3(0.085, 0.040, 0.015);
+                vec3 c0_wave2  = vec3(0.050, 0.022, 0.008);
+                vec3 c0_crest  = vec3(0.45, 0.30, 0.18);
                 
-                // Bottom Palette (Scroll = 1.0): Deep Sapphire Blue
-                vec3 c1_shadow = vec3(0.0004, 0.0006, 0.0012); // Deepest sapphire shadow
-                vec3 c1_wave1  = vec3(0.015, 0.035, 0.065);    // Rich cobalt/teal blue
-                vec3 c1_wave2  = vec3(0.008, 0.020, 0.045);    // Deep sapphire body
-                vec3 c1_crest  = vec3(0.18, 0.35, 0.55);       // Polished blue-steel sheen
+                vec3 c1_shadow = vec3(0.0004, 0.0006, 0.0012);
+                vec3 c1_wave1  = vec3(0.015, 0.035, 0.065);
+                vec3 c1_wave2  = vec3(0.008, 0.020, 0.045);
+                vec3 c1_crest  = vec3(0.18, 0.35, 0.55);
                 
-                // Interpolate colors smoothly based on scroll progress
                 float t = smoothstep(0.0, 1.0, scroll);
                 vec3 colShadow = mix(c0_shadow, c1_shadow, t);
                 vec3 colWave1  = mix(c0_wave1, c1_wave1, t);
@@ -581,15 +935,11 @@
                 vec3 colCrest  = mix(c0_crest, c1_crest, t);
                 
                 // --- 6. Final Composition ---
-                // Blend wave details and wave bodies with deep shadow background
                 vec3 color = colShadow;
                 color = mix(color, colWave2, smoothstep(-0.6, 0.2, waveField));
                 color = mix(color, colWave1, smoothstep(0.0, 0.8, waveField));
+                color += colCrest * crest * (1.4 + uResonance * 0.35);
                 
-                // Add the soft satinated crest highlights with rich metallic multiplier
-                color += colCrest * crest * 1.4;
-                
-                // Apply a gentle vignette to match cinematic design
                 float vignette = 1.0 - dot(uv, uv) * 0.12;
                 color *= vignette;
                 
@@ -809,25 +1159,102 @@
             rimLight.intensity = 10.0 + s * 5.0;
         }
 
-        // Core molten forge glow under the sculpture warms up with incandescent heat
+        // Core molten forge glow under the sculpture warms up with incandescent heat + acoustic resonance pulse
         if (forgeGlowLight) {
-            forgeGlowLight.intensity = s * 5.5;
+            forgeGlowLight.intensity = s * 4.5 + resonanceEnergy * 2.4;
         }
 
-        // Subtle fiery molten bronze emissive glow across the sculpture muscles
+        // Rim light pulses subtly with metallic ringing harmonics to highlight bronze contours
+        if (rimLight) {
+            rimLight.intensity = 10.0 + s * 5.0 + resonanceEnergy * 3.5;
+        }
+
+        // Subtle fiery molten bronze emissive glow across the sculpture muscles (preserves deep chiaroscuro shadows)
         if (gltfModel) {
+            const resBoost = resonanceEnergy * 0.014;
             gltfModel.traverse((child) => {
                 if (child.isMesh && child.material) {
                     if (!child.material.emissive) {
                         child.material.emissive = new THREE.Color(0x000000);
                     }
                     child.material.emissive.setRGB(
-                        s * 0.14,
-                        s * 0.055,
-                        s * 0.015
+                        s * 0.045 + resBoost,
+                        s * 0.018 + resBoost * 0.5,
+                        s * 0.005 + resBoost * 0.2
                     );
                 }
             });
+        }
+    }
+
+    function updateResonanceHUD(scroll, grainsPerSec) {
+        const chapterEl = document.getElementById('resonance-chapter');
+        const freqEl = document.getElementById('resonance-freq');
+        const densityEl = document.getElementById('resonance-density');
+        const dockEl = document.getElementById('resonance-dock');
+
+        const chapterName = getChapterRegisterName(scroll);
+        if (chapterEl && chapterEl.textContent !== chapterName) {
+            chapterEl.textContent = chapterName;
+        }
+        if (freqEl) {
+            freqEl.textContent = `${Math.round(lastKnownFreqHz)} Hz`;
+        }
+        if (densityEl) {
+            densityEl.textContent = `${grainsPerSec} gr/s`;
+        }
+        if (dockEl) {
+            dockEl.classList.toggle('resonating', resonanceEnergy > 0.08 && isAudioEnabled);
+        }
+
+        // Update 5 harmonic spectrum bars using compositor-only transform: scaleY()
+        const t = performance.now() * 0.012;
+        for (let i = 0; i < 5; i++) {
+            const bar = document.getElementById(`res-bar-${i}`);
+            if (bar) {
+                if (!isAudioEnabled) {
+                    bar.style.transform = 'scaleY(0.15)';
+                } else {
+                    const wave = Math.abs(Math.sin(t + i * 1.15));
+                    const scale = 0.22 + resonanceEnergy * (0.35 + wave * 0.65);
+                    bar.style.transform = `scaleY(${Math.min(1.0, scale).toFixed(3)})`;
+                }
+            }
+        }
+
+        document.body.setAttribute('data-audio-enabled', String(isAudioEnabled));
+        document.body.setAttribute('data-tuning-mode', currentTuningMode);
+        document.body.setAttribute('data-grain-count', String(totalGrainsTriggered));
+        document.body.setAttribute('data-last-freq', String(Math.round(lastKnownFreqHz)));
+    }
+
+    function emitGranularBurst(count = 3, baseVelocity = 0.024) {
+        ensureAudioContext();
+        const nowPerf = performance.now();
+        manualVelocityImpulse = Math.max(manualVelocityImpulse, baseVelocity);
+
+        for (let i = 0; i < count; i++) {
+            setTimeout(() => {
+                grainStepCounter++;
+                const params = calculateGranularGrainParams(
+                    currentScroll,
+                    baseVelocity + i * 0.008,
+                    999,
+                    grainStepCounter,
+                    currentTuningMode
+                );
+                lastKnownFreqHz = params.baseFrequencyHz;
+                totalGrainsTriggered++;
+                const ts = performance.now();
+                lastGrainTimestamp = ts;
+                recentGrainTimestamps.push(ts);
+                resonanceEnergy = Math.min(1.0, resonanceEnergy + 0.45);
+                if (isAudioEnabled) {
+                    synthesizeMetallicGrain(params);
+                }
+                updateLighting(currentScroll);
+                updateResonanceHUD(currentScroll, recentGrainTimestamps.length);
+            }, i * 65);
         }
     }
 
@@ -867,9 +1294,11 @@
         navLinks.forEach((link, index) => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
+                ensureAudioContext();
                 const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
                 const targetY = maxScroll * targetScrolls[index];
                 window.scrollTo({ top: targetY, behavior: 'smooth' });
+                manualVelocityImpulse = Math.max(manualVelocityImpulse, 0.022);
             });
         });
     }
@@ -883,6 +1312,63 @@
             targetMouseX = (event.clientX / window.innerWidth) * 2 - 1;
             targetMouseY = (event.clientY / window.innerHeight) * 2 - 1;
         });
+
+        // Unlock Web Audio and feed scroll velocity impulse on wheel / touch / scroll
+        window.addEventListener('wheel', (e) => {
+            ensureAudioContext();
+            const wheelIntensity = Math.min(0.05, Math.abs(e.deltaY) / 2400);
+            manualVelocityImpulse = Math.max(manualVelocityImpulse, wheelIntensity);
+        }, { passive: true });
+
+        window.addEventListener('scroll', () => {
+            ensureAudioContext();
+            manualVelocityImpulse = Math.max(manualVelocityImpulse, 0.008);
+        }, { passive: true });
+
+        // Granular Resonance Controls
+        const toggleBtn = document.getElementById('resonance-toggle-btn');
+        const statusLabel = document.getElementById('resonance-status-label');
+        const tuningBtn = document.getElementById('tuning-mode-btn');
+        const strikeBtn = document.getElementById('strike-bronze-btn');
+
+        if (toggleBtn && statusLabel) {
+            toggleBtn.addEventListener('click', () => {
+                isAudioEnabled = !isAudioEnabled;
+                toggleBtn.setAttribute('aria-pressed', String(isAudioEnabled));
+                statusLabel.textContent = isAudioEnabled ? 'Resonance: On' : 'Resonance: Off';
+                if (isAudioEnabled) {
+                    ensureAudioContext();
+                    emitGranularBurst(2, 0.018);
+                } else if (audioCtx && audioCtx.state === 'running') {
+                    audioCtx.suspend().catch(() => {});
+                }
+                updateResonanceHUD(currentScroll, recentGrainTimestamps.length);
+            });
+        }
+
+        if (tuningBtn) {
+            tuningBtn.addEventListener('click', () => {
+                const nextIdx = (TUNING_ORDER.indexOf(currentTuningMode) + 1) % TUNING_ORDER.length;
+                currentTuningMode = TUNING_ORDER[nextIdx];
+                tuningBtn.textContent = TUNING_LABELS[currentTuningMode];
+                if (isAudioEnabled) {
+                    emitGranularBurst(3, 0.022);
+                } else {
+                    updateResonanceHUD(currentScroll, recentGrainTimestamps.length);
+                }
+            });
+        }
+
+        if (strikeBtn) {
+            strikeBtn.addEventListener('click', () => {
+                if (!isAudioEnabled) {
+                    isAudioEnabled = true;
+                    if (toggleBtn) toggleBtn.setAttribute('aria-pressed', 'true');
+                    if (statusLabel) statusLabel.textContent = 'Resonance: On';
+                }
+                emitGranularBurst(4, 0.032);
+            });
+        }
 
         // Hover effect for cursor
         const hoverables = document.querySelectorAll('a, button, .contact-btn, .nav-link, #contact-close-btn');
@@ -945,6 +1431,42 @@
 
         // smooth physical lerp (inertia)
         const scrollDelta = targetScroll - currentScroll;
+        const rawScrollVelocity = Math.abs(scrollDelta);
+        const effectiveScrollVelocity = Math.max(rawScrollVelocity, manualVelocityImpulse);
+        manualVelocityImpulse *= Math.exp(-deltaTime * 6.5);
+        if (manualVelocityImpulse < 0.00005) manualVelocityImpulse = 0;
+
+        // Trigger scroll-speed coupled granular metallic synthesis
+        const nowPerf = performance.now();
+        const elapsedSinceLastGrain = nowPerf - lastGrainTimestamp;
+        const grainParams = calculateGranularGrainParams(
+            currentScroll,
+            effectiveScrollVelocity,
+            elapsedSinceLastGrain,
+            grainStepCounter,
+            currentTuningMode
+        );
+
+        if (grainParams.shouldTrigger) {
+            grainStepCounter++;
+            totalGrainsTriggered++;
+            lastGrainTimestamp = nowPerf;
+            recentGrainTimestamps.push(nowPerf);
+            lastKnownFreqHz = grainParams.baseFrequencyHz;
+            resonanceEnergy = Math.min(1.0, Math.max(resonanceEnergy, grainParams.visualResonancePulse));
+            if (isAudioEnabled) {
+                synthesizeMetallicGrain(grainParams);
+            }
+        } else {
+            resonanceEnergy *= Math.exp(-deltaTime * 3.8);
+            if (resonanceEnergy < 0.002) resonanceEnergy = 0;
+        }
+
+        // Prune grain timestamps older than 1000ms for accurate grains/sec readout
+        while (recentGrainTimestamps.length > 0 && nowPerf - recentGrainTimestamps[0] > 1000) {
+            recentGrainTimestamps.shift();
+        }
+
         if (Math.abs(scrollDelta) > 0.00005) {
             currentScroll += scrollDelta * 0.025;
             updateSlides(currentScroll);
@@ -955,7 +1477,11 @@
             updateSlides(currentScroll);
             updateGridDots(currentScroll);
             updateLighting(currentScroll);
+        } else if (resonanceEnergy > 0.005) {
+            updateLighting(currentScroll);
         }
+
+        updateResonanceHUD(currentScroll, recentGrainTimestamps.length);
 
         // smooth model rotation lerp
         if (Math.abs(targetMouseX - mouseX) > 0.0005) {
@@ -984,13 +1510,14 @@
             modelPivot.rotation.x = mouseY * 0.15;
         }
 
-        // 2. sparks physics, accelerated/turbulent on fast scroll
+        // 2. sparks physics, accelerated/turbulent on fast scroll and metallic grain resonance
         if (sparkParticles) {
             const positions = sparkParticles.geometry.attributes.position.array;
             const time = clock.getElapsedTime();
             const scrollVelocity = Math.abs(targetScroll - currentScroll);
-            const speedMultiplier = 1.0 + scrollVelocity * 9.0;
-            const turbulence = scrollVelocity * 0.8;
+            const speedMultiplier = 1.0 + scrollVelocity * 9.0 + resonanceEnergy * 2.4;
+            const turbulence = scrollVelocity * 0.8 + resonanceEnergy * 0.35;
+            sparkParticles.material.size = 0.025 + resonanceEnergy * 0.012;
 
             for (let i = 0; i < sparkCount; i++) {
                 const idx = i * 3;
@@ -1034,6 +1561,7 @@
             shaderUniforms.uTime.value = clock.getElapsedTime();
             shaderUniforms.uMouse.value.set(mouseX, -mouseY);
             shaderUniforms.uScroll.value = currentScroll;
+            shaderUniforms.uResonance.value = resonanceEnergy;
         }
 
         renderer.render(scene, camera);
